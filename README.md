@@ -45,9 +45,10 @@ Runs on `http://localhost:3000`
 
 ## Pages
 
-- `/` — Home
+- `/` — Home (shows items)
+- `/item/:id` — Item details
 - `/admin/login` — Admin login
-- `/admin/dashboard` — Admin dashboard
+- `/admin/dashboard` — Admin dashboard (manage items & categories)
 
 ## Author
 
