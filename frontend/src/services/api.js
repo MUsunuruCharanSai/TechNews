@@ -43,6 +43,31 @@ export const articleAPI = {
   remove: (id) => request(`/articles/${id}`, { method: 'DELETE' }),
 };
 
+export const categoryAPI = {
+  getAll: () => request('/categories'),
+  create: (name) =>
+    request('/categories', {
+      method: 'POST',
+      body: JSON.stringify({ name }),
+    }),
+  update: (id, name) =>
+    request(`/categories/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ name }),
+    }),
+  remove: (id) => request(`/categories/${id}`, { method: 'DELETE' }),
+};
+
+export const itemAPI = {
+  getAll: () => request('/items'),
+  getOne: (id) => request(`/items/${id}`),
+  create: (body) =>
+    request('/items', { method: 'POST', body: JSON.stringify(body) }),
+  update: (id, body) =>
+    request(`/items/${id}`, { method: 'PUT', body: JSON.stringify(body) }),
+  remove: (id) => request(`/items/${id}`, { method: 'DELETE' }),
+};
+
 export const saveAuth = (token, user) => {
   localStorage.setItem('token', token);
   localStorage.setItem('user', JSON.stringify(user));
