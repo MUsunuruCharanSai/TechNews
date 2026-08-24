@@ -16,7 +16,14 @@ const request = async (url, options = {}) => {
   }
 
   const res = await fetch(`${API_URL}${url}`, { ...options, headers });
-  const data = await res.json();
+  const text = await res.text();
+
+  let data = {};
+  try {
+    data = text ? JSON.parse(text) : {};
+  } catch {
+    throw new Error('Server error');
+  }
 
   if (!res.ok) {
     throw new Error(data.message || 'Something went wrong');
@@ -66,6 +73,19 @@ export const itemAPI = {
   update: (id, body) =>
     request(`/items/${id}`, { method: 'PUT', body: JSON.stringify(body) }),
   remove: (id) => request(`/items/${id}`, { method: 'DELETE' }),
+};
+
+export const commentAPI = {
+  getByItem: (itemId) => request(`/comments/item/${itemId}`),
+  create: (body) =>
+    request('/comments', { method: 'POST', body: JSON.stringify(body) }),
+};
+
+export const profileAPI = {
+  get: () => request('/profile'),
+  getById: (id) => request(`/profile/${id}`),
+  update: (body) =>
+    request('/profile', { method: 'PUT', body: JSON.stringify(body) }),
 };
 
 export const saveAuth = (token, user) => {
