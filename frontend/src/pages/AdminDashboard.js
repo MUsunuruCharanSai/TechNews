@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { categoryAPI, itemAPI, isLoggedIn } from '../services/api';
+import { categoryAPI, itemAPI, profileAPI, isLoggedIn } from '../services/api';
 
 const getEmptyItem = () => ({
   name: '',
@@ -24,6 +24,14 @@ function AdminDashboard() {
   const [itemForm, setItemForm] = useState(getEmptyItem());
   const [editItemId, setEditItemId] = useState(null);
 
+  const [profile, setProfile] = useState({
+    name: '',
+    image: '',
+    designation: '',
+    about: '',
+  });
+  const [profileMsg, setProfileMsg] = useState('');
+
   const loggedIn = isLoggedIn();
 
   const loadData = async () => {
@@ -34,6 +42,18 @@ function AdminDashboard() {
       ]);
       setCategories(cats);
       setItems(allItems);
+
+      try {
+        const userProfile = await profileAPI.get();
+        setProfile({
+          name: userProfile.name || '',
+          image: userProfile.image || '',
+          designation: userProfile.designation || '',
+          about: userProfile.about || '',
+        });
+      } catch {
+        // profile api not ready yet
+      }
     } catch (err) {
       setError(err.message);
     } finally {
@@ -175,9 +195,38 @@ function AdminDashboard() {
     }
   };
 
+  const handleProfileChange = (e) => {
+    setProfile({ ...profile, [e.target.name]: e.target.value });
+  };
+
+  const handleProfileSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    try {
+      await profileAPI.update(profile);
+      setProfileMsg('Profile saved');
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   return (
     <div className="container dashboard">
-      <h1>Admin Dashboard</h1>
+      <div className="dashboard-top">
+        <h1>Admin Dashboard</h1>
+        <button
+          className="profile-icon"
+          onClick={() => setTab('profile')}
+          title="Profile"
+        >
+          {profile.image ? (
+            <img src={profile.image} alt="profile" />
+          ) : (
+            <span>{profile.name?.[0]?.toUpperCase() || 'A'}</span>
+          )}
+        </button>
+      </div>
 
       <div className="tabs">
         <button
@@ -200,70 +249,6 @@ function AdminDashboard() {
         <p>Loading...</p>
       ) : (
         <>
-          {tab === 'categories' && (
-            <section className="panel">
-              <h2>Manage Categories</h2>
-
-              <form onSubmit={handleAddCategory} className="inline-form">
-                <input
-                  type="text"
-                  placeholder="Category name"
-                  value={categoryName}
-                  onChange={(e) => setCategoryName(e.target.value)}
-                  required
-                />
-                <button type="submit">Add Category</button>
-              </form>
-
-              {editCategoryId && (
-                <form onSubmit={handleUpdateCategory} className="inline-form">
-                  <input
-                    type="text"
-                    value={editCategoryName}
-                    onChange={(e) => setEditCategoryName(e.target.value)}
-                    required
-                  />
-                  <button type="submit">Save</button>
-                  <button
-                    type="button"
-                    className="btn-secondary"
-                    onClick={() => setEditCategoryId(null)}
-                  >
-                    Cancel
-                  </button>
-                </form>
-              )}
-
-              <ul className="simple-list">
-                {categories.map((cat) => (
-                  <li key={cat._id}>
-                    <span>{cat.name}</span>
-                    <div>
-                      <button
-                        onClick={() => {
-                          setEditCategoryId(cat._id);
-                          setEditCategoryName(cat.name);
-                        }}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="btn-danger"
-                        onClick={() => handleDeleteCategory(cat._id)}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-
-              {categories.length === 0 && (
-                <p className="empty-text">No categories yet. Add one above.</p>
-              )}
-            </section>
-          )}
-
           {tab === 'items' && (
             <>
               <section className="panel">
@@ -394,6 +379,125 @@ function AdminDashboard() {
                 )}
               </section>
             </>
+          )}
+
+          {tab === 'categories' && (
+            <section className="panel">
+              <h2>Manage Categories</h2>
+
+              <form onSubmit={handleAddCategory} className="inline-form">
+                <input
+                  type="text"
+                  placeholder="Category name"
+                  value={categoryName}
+                  onChange={(e) => setCategoryName(e.target.value)}
+                  required
+                />
+                <button type="submit">Add Category</button>
+              </form>
+
+              {editCategoryId && (
+                <form onSubmit={handleUpdateCategory} className="inline-form">
+                  <input
+                    type="text"
+                    value={editCategoryName}
+                    onChange={(e) => setEditCategoryName(e.target.value)}
+                    required
+                  />
+                  <button type="submit">Save</button>
+                  <button
+                    type="button"
+                    className="btn-secondary"
+                    onClick={() => setEditCategoryId(null)}
+                  >
+                    Cancel
+                  </button>
+                </form>
+              )}
+
+              <ul className="simple-list">
+                {categories.map((cat) => (
+                  <li key={cat._id}>
+                    <span>{cat.name}</span>
+                    <div>
+                      <button
+                        onClick={() => {
+                          setEditCategoryId(cat._id);
+                          setEditCategoryName(cat.name);
+                        }}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="btn-danger"
+                        onClick={() => handleDeleteCategory(cat._id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+
+              {categories.length === 0 && (
+                <p className="empty-text">No categories yet. Add one above.</p>
+              )}
+            </section>
+          )}
+
+          {tab === 'profile' && (
+            <section className="panel">
+              <h2>My Profile</h2>
+
+              {profileMsg && <p className="success-msg">{profileMsg}</p>}
+
+              <form onSubmit={handleProfileSubmit}>
+                <label>
+                  Name
+                  <input
+                    name="name"
+                    value={profile.name}
+                    onChange={handleProfileChange}
+                    placeholder="Your name"
+                  />
+                </label>
+
+                <label>
+                  Image Link
+                  <input
+                    name="image"
+                    value={profile.image}
+                    onChange={handleProfileChange}
+                    placeholder="https://example.com/photo.jpg"
+                  />
+                </label>
+
+                <label>
+                  Designation
+                  <input
+                    name="designation"
+                    value={profile.designation}
+                    onChange={handleProfileChange}
+                    placeholder="e.g. Admin, Editor"
+                  />
+                </label>
+
+                <label>
+                  About
+                  <textarea
+                    name="about"
+                    value={profile.about}
+                    onChange={handleProfileChange}
+                    rows="4"
+                    placeholder="Write something about yourself"
+                  />
+                </label>
+
+                <div className="form-actions">
+                  <button type="submit">Save Profile</button>
+                </div>
+              </form>
+            </section>
           )}
         </>
       )}
