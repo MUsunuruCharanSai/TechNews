@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import Comments from '../components/Comments';
 import ItemImage from '../components/ItemImage';
+import PostedBy from '../components/PostedBy';
 import { itemAPI } from '../services/api';
 import { cleanImages } from '../utils/imageHelper';
 
@@ -30,13 +32,17 @@ function ItemDetail() {
         &larr; Back to Home
       </Link>
 
-      <ItemImage src={item.mainImage} alt={item.name} boxClass="detail-size" />
-      <span className="badge">{item.category?.name}</span>
-      <h1>{item.name}</h1>
-      <p className="detail-desc">{item.description}</p>
+      <div className="detail-card">
+        <ItemImage src={item.mainImage} alt={item.name} boxClass="detail-size" />
+        <span className="badge">{item.category?.name}</span>
+        <h1>{item.name}</h1>
+        <p className="detail-desc">{item.description}</p>
+      </div>
+
+      <PostedBy user={item.postedBy} />
 
       {extraImages.length > 0 && (
-        <div className="extra-images">
+        <div className="detail-card extra-images">
           <h3>Additional Images</h3>
           <div className="extra-grid">
             {extraImages.map((img, i) => (
@@ -50,6 +56,8 @@ function ItemDetail() {
           </div>
         </div>
       )}
+
+      <Comments itemId={item._id} />
     </div>
   );
 }
