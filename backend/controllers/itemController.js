@@ -5,6 +5,7 @@ const getItems = async (req, res) => {
   try {
     const items = await Item.find()
       .populate('category', 'name')
+      .populate('postedBy', 'name image designation about')
       .sort({ createdAt: -1 });
     res.json(items);
   } catch (err) {
@@ -15,7 +16,9 @@ const getItems = async (req, res) => {
 // get single item
 const getItem = async (req, res) => {
   try {
-    const item = await Item.findById(req.params.id).populate('category', 'name');
+    const item = await Item.findById(req.params.id)
+      .populate('category', 'name')
+      .populate('postedBy', 'name image designation about');
     if (!item) {
       return res.status(404).json({ message: 'Item not found' });
     }
@@ -36,9 +39,12 @@ const createItem = async (req, res) => {
       additionalImages: additionalImages || [],
       description,
       category,
+      postedBy: req.user._id,
     });
 
-    const savedItem = await Item.findById(item._id).populate('category', 'name');
+    const savedItem = await Item.findById(item._id)
+      .populate('category', 'name')
+      .populate('postedBy', 'name image designation about');
     res.status(201).json(savedItem);
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -50,7 +56,9 @@ const updateItem = async (req, res) => {
   try {
     const item = await Item.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
-    }).populate('category', 'name');
+    })
+      .populate('category', 'name')
+      .populate('postedBy', 'name image designation about');
 
     if (!item) {
       return res.status(404).json({ message: 'Item not found' });

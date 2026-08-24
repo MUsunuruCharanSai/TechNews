@@ -16,6 +16,22 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: 'admin',
     },
+    name: {
+      type: String,
+      default: '',
+    },
+    image: {
+      type: String,
+      default: '',
+    },
+    designation: {
+      type: String,
+      default: '',
+    },
+    about: {
+      type: String,
+      default: '',
+    },
   },
   { timestamps: true }
 );

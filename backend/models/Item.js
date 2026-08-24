@@ -24,6 +24,10 @@ const itemSchema = new mongoose.Schema(
       ref: 'Category',
       required: true,
     },
+    postedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
   },
   { timestamps: true }
 );
