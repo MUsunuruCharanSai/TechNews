@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import MouseFollower from './components/MouseFollower';
 import Home from './pages/Home';
 import ArticleDetail from './pages/ArticleDetail';
 import ItemDetail from './pages/ItemDetail';
@@ -13,6 +14,7 @@ function App() {
   return (
     <ThemeProvider>
       <BrowserRouter>
+        <MouseFollower />
         <Navbar />
         <main className="main-content">
           <Routes>
