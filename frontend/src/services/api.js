@@ -88,6 +88,14 @@ export const profileAPI = {
     request('/profile', { method: 'PUT', body: JSON.stringify(body) }),
 };
 
+export const subscribeAPI = {
+  subscribe: (email) =>
+    request('/subscribe', {
+      method: 'POST',
+      body: JSON.stringify({ email }),
+    }),
+};
+
 export const saveAuth = (token, user) => {
   localStorage.setItem('token', token);
   localStorage.setItem('user', JSON.stringify(user));
