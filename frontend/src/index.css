@@ -70,6 +70,46 @@ a {
   color: #4fc3f7;
 }
 
+/* sub navbar */
+.sub-navbar {
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.sub-nav-inner {
+  display: flex;
+  gap: 28px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  overflow-x: auto;
+}
+
+.sub-link {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #444;
+  white-space: nowrap;
+  padding-bottom: 4px;
+  border-bottom: 2px solid transparent;
+}
+
+.sub-link:hover {
+  color: #1a1a2e;
+}
+
+.sub-link.active {
+  color: #2ecc71;
+  border-bottom-color: #2ecc71;
+  font-weight: 600;
+}
+
+.category-title {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  color: #1a1a2e;
+}
+
 /* hero */
 .hero {
   text-align: center;
@@ -240,6 +280,47 @@ a {
   font-size: 0.75rem;
 }
 
+.news-card-meta-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* share */
+.share-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.share-btn {
+  padding: 6px 14px;
+  background: #1a1a2e;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.share-btn:hover {
+  background: #2d2d4a;
+}
+
+.share-msg {
+  font-size: 0.8rem;
+  color: #2ecc71;
+}
+
+body.dark .share-btn {
+  background: #4fc3f7;
+  color: #1a1a2e;
+}
+
+body.dark .share-btn:hover {
+  background: #81d4fa;
+}
+
 /* pagination */
 .pagination {
   display: flex;
@@ -364,6 +445,19 @@ a {
   margin: 12px 0;
   font-size: 1.9rem;
   color: #1a1a2e;
+}
+
+.detail-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin: 12px 0;
+}
+
+.detail-title-row h1 {
+  margin: 0;
+  flex: 1;
 }
 
 .detail-desc {
@@ -1089,6 +1183,28 @@ form select {
 /* dark mode */
 body.dark {
   background: #0f0f14;
+  color: #e0e0e0;
+}
+
+body.dark .sub-navbar {
+  background: #1a1a24;
+  border-color: #333;
+}
+
+body.dark .sub-link {
+  color: #ccc;
+}
+
+body.dark .sub-link:hover,
+body.dark .sub-link.active {
+  color: #4fc3f7;
+}
+
+body.dark .sub-link.active {
+  border-bottom-color: #4fc3f7;
+}
+
+body.dark .category-title {
   color: #e0e0e0;
 }
 
