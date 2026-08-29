@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import Navbar from './components/Navbar';
+import SubNavbar from './components/SubNavbar';
 import Footer from './components/Footer';
 import MouseFollower from './components/MouseFollower';
 import Home from './pages/Home';
@@ -16,6 +17,7 @@ function App() {
       <BrowserRouter>
         <MouseFollower />
         <Navbar />
+        <SubNavbar />
         <main className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />
