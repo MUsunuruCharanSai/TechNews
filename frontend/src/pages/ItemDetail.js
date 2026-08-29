@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import Comments from '../components/Comments';
 import ItemImage from '../components/ItemImage';
 import PostedBy from '../components/PostedBy';
+import ShareButton from '../components/ShareButton';
 import { itemAPI } from '../services/api';
 import { cleanImages } from '../utils/imageHelper';
 
@@ -35,7 +36,10 @@ function ItemDetail() {
       <div className="detail-card">
         <ItemImage src={item.mainImage} alt={item.name} boxClass="detail-size" />
         <span className="badge">{item.category?.name}</span>
-        <h1>{item.name}</h1>
+        <div className="detail-title-row">
+          <h1>{item.name}</h1>
+          <ShareButton title={item.name} />
+        </div>
         <p className="detail-desc">{item.description}</p>
       </div>
 

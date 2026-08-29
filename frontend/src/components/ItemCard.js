@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
 import { fixImageUrl } from '../utils/imageHelper';
+import ShareButton from './ShareButton';
 
 function ItemCard({ item }) {
   const imageUrl = fixImageUrl(item.mainImage);
   const author = item.postedBy?.name || 'Admin';
+  const itemUrl = `${window.location.origin}/item/${item._id}`;
 
   const date = new Date(item.createdAt).toLocaleDateString('en-US', {
     month: 'long',
@@ -29,7 +31,10 @@ function ItemCard({ item }) {
           <span>
             BY <strong>{author.toUpperCase()}</strong>
           </span>
-          <span className="news-card-date">&#128339; {date.toUpperCase()}</span>
+          <div className="news-card-meta-right">
+            <span className="news-card-date">&#128339; {date.toUpperCase()}</span>
+            <ShareButton title={item.name} url={itemUrl} />
+          </div>
         </div>
       </div>
     </Link>
